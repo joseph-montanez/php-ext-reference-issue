@@ -10,10 +10,9 @@ extern zend_class_entry *skeleton_ray_ce;
 typedef struct _skeleton_ray_object {
     Ray ray;
     HashTable *prop_handler;
-    zend_object std;
-
     skeleton_vector3_object *position;
     skeleton_vector3_object *direction;
+    zend_object std;
 } skeleton_ray_object;
 
 static inline skeleton_ray_object *skeleton_ray_fetch_object(zend_object *obj) {

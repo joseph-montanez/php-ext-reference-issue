@@ -225,13 +225,13 @@ static HashTable *skeleton_vector3_get_properties(zend_object *object)/* {{{ */
     }
 
     ZEND_HASH_FOREACH_STR_KEY_PTR(obj->prop_handler, key, hnd) {
-                zval *ret, val;
-                ret = skeleton_vector3_property_reader(obj, hnd, &val);
-                if (ret == NULL) {
-                    ret = &EG(uninitialized_zval);
-                }
-                zend_hash_update(props, key, ret);
-            } ZEND_HASH_FOREACH_END();
+        zval *ret, val;
+        ret = skeleton_vector3_property_reader(obj, hnd, &val);
+        if (ret == NULL) {
+            ret = &EG(uninitialized_zval);
+        }
+        zend_hash_update(props, key, ret);
+    } ZEND_HASH_FOREACH_END();
 
     return props;
 }
@@ -244,30 +244,45 @@ void skeleton_vector3_free_storage(zend_object *object)
     zend_object_std_dtor(&intern->std);
 }
 
-zend_object * skeleton_vector3_new(zend_class_entry *ce)
+zend_object * skeleton_vector3_new_ex(zend_class_entry *ce, zend_object *orig)
 {
     skeleton_vector3_object *intern;
-    intern = (skeleton_vector3_object*) ecalloc(1, sizeof(skeleton_vector3_object) + zend_object_properties_size(ce));
+
+    intern = zend_object_alloc(sizeof(skeleton_vector3_object), ce);
+
     intern->prop_handler = &skeleton_vector3_prop_handlers;
+
+    if (orig) {
+        skeleton_vector3_object *other = skeleton_vector3_fetch_object(orig);
+        intern->vector3 = (Vector3) {
+                .x = other->vector3.x,
+                .y = other->vector3.y,
+                .z = other->vector3.z
+        };
+    }
 
     zend_object_std_init(&intern->std, ce);
     object_properties_init(&intern->std, ce);
-
     intern->std.handlers = &skeleton_vector3_object_handlers;
 
     return &intern->std;
 }
 
-static zend_object *skeleton_vector3_clone(zend_object *object)
+
+/* {{{  */
+static zend_object *skeleton_vector3_new(zend_class_entry *class_type)
 {
-    skeleton_vector3_object *old_object;
+    return skeleton_vector3_new_ex(class_type, NULL);
+}
+/* }}} */
+
+static zend_object *skeleton_vector3_clone(zend_object *old_object)
+{
     zend_object *new_object;
 
-    old_object = skeleton_vector3_fetch_object(object);
-    new_object = skeleton_vector3_new(old_object->std.ce);
+    new_object = skeleton_vector3_new_ex(old_object->ce, old_object);
 
-    skeleton_vector3_object *new_vector3 = skeleton_vector3_fetch_object(new_object);
-    new_vector3->vector3 = old_object->vector3;
+    zend_objects_clone_members(new_object, old_object);
 
     return new_object;
 }
