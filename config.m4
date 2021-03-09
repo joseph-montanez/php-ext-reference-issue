@@ -10,7 +10,7 @@ PHP_ARG_ENABLE(skeleton, whether to enable skeleton, [ --enable-skeleton   Enabl
 
 if test "$PHP_SKELETON" != "no"; then
   AC_DEFINE(HAVE_SKELETON, 1, [whether skeleton is enabled])
-  PHP_NEW_EXTENSION(skeleton, skeleton.c, $ext_shared)
+  PHP_NEW_EXTENSION(skeleton, skeleton.c skeleton-vector3.c skeleton-ray.c, $ext_shared)
 
   PHP_ADD_MAKEFILE_FRAGMENT
   PHP_INSTALL_HEADERS([ext/skeleton], [php_skeleton.h])

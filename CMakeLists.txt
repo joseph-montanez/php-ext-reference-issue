@@ -3,7 +3,7 @@ project(skeleton C)
 
 add_compile_definitions(HAVE_SKELETON)
 
-set(SOURCE_FILES php_skeleton skeleton.c)
+set(SOURCE_FILES php_skeleton skeleton.c skeleton.h)
 
 execute_process (
         COMMAND php-config --include-dir

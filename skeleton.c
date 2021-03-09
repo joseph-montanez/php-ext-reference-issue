@@ -35,6 +35,9 @@
 #include "php.h"
 #include "php_ini.h"
 #include "php_skeleton.h"
+#include "skeleton.h"
+#include "skeleton-vector3.h"
+#include "skeleton-ray.h"
 #include "zend_exceptions.h"
 #include "ext/standard/info.h"
 
@@ -51,15 +54,40 @@ static const zend_function_entry functions[] = {
     PHP_FE_END
 };
 
+
+/* {{{ PHP_MINIT_FUNCTION
+ */
+PHP_MINIT_FUNCTION(skeleton)
+{
+    skeleton_vector3_startup(INIT_FUNC_ARGS_PASSTHRU);
+    skeleton_ray_startup(INIT_FUNC_ARGS_PASSTHRU);
+}
+/* }}} */
+
+
+/* {{{ PHP_MINFO_FUNCTION
+ */
+PHP_MINFO_FUNCTION(skeleton)
+{
+    php_info_print_table_start();
+    php_info_print_table_header(2, "raylib support", "enabled");
+    php_info_print_table_end();
+
+    /* Remove comments if you have entries in php.ini
+    DISPLAY_INI_ENTRIES();
+    */
+}
+/* }}} */
+
 zend_module_entry skeleton_module_entry = {
     STANDARD_MODULE_HEADER,
     PHP_SKELETON_EXTNAME,
     functions,
+    PHP_MINIT(skeleton),
     NULL,
     NULL,
     NULL,
-    NULL,
-    NULL,
+    PHP_MINFO(skeleton),
     PHP_SKELETON_VERSION,
     STANDARD_MODULE_PROPERTIES
 };
@@ -67,6 +95,7 @@ zend_module_entry skeleton_module_entry = {
 #ifdef COMPILE_DL_SKELETON
 ZEND_GET_MODULE(skeleton)
 #endif
+
 
 /* Replace the example function with something better :) */
 PHP_FUNCTION(skeleton_nop)

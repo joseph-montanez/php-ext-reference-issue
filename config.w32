@@ -4,7 +4,7 @@
 ARG_ENABLE("skeleton", "enable skeleton", "no");
 
 if (PHP_SKELETON != "no") {
-	EXTENSION("skeleton", "skeleton.c");
+	EXTENSION("skeleton", "skeleton.c skeleton-vector3.c skeleton-ray.c");
 	AC_DEFINE('HAVE_SKELETON', 1 , 'whether skeleton is enabled');
-	PHP_INSTALL_HEADERS("ext/skeleton/", "php_skeleton.h");
+	PHP_INSTALL_HEADERS("ext/skeleton/", "php_skeleton.h skeleton.h skeleton-vector3.h skeleton-ray.h");
 }

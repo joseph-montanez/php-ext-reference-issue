@@ -47,5 +47,8 @@ static PHP_FUNCTION(skeleton_nop);
 
 extern zend_module_entry skeleton_module_entry;
 
+zend_class_entry *skeleton_vector3_ce;
+zend_class_entry *skeleton_ray_ce;
+
 #endif
 
